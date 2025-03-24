@@ -2,4 +2,8 @@
 // after that a heap?
 // https://www.youtube.com/@CodeVault
 
-int main(int argc, char *argv[]) { return 0; }
+#include <stdio.h>
+int main(int argc, char *argv[]) {
+  printf("Hello, C");
+  return 0;
+}
