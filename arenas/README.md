@@ -2,10 +2,38 @@
 [c-cpu-cache-alignment](https://en.ittrip.xyz/c-language/c-cpu-cache-alignment) \
 [stackoverflow -- purpose-of-memory-alignment](https://stackoverflow.com/questions/381244/purpose-of-memory-alignment) \
 [oud IBM artickle?](https://web.archive.org/web/20201021053824/https://developer.ibm.com/technologies/systems/articles/pa-dalign/) \
-[memory-allocation-strategies-002](https://www.gingerbill.org/article/2019/02/08/memory-allocation-strategies-002/) 
+[memory-allocation-strategies-002](https://www.gingerbill.org/article/2019/02/08/memory-allocation-strategies-002/) \
+[Andrew Kelley Practical Data Oriented Design (DoD)](https://www.youtube.com/watch?v=IroPQ150F6c)
 
-### Memory alignament
+# Memory alignament and Data oriented programming
+
+```markdown
+If data is not aligned to its natural boundaries (e.g., if u64 starts at an address that is not a multiple of 8), the CPU may have to load multiple cache lines to access a single 8-byte value, which results in cache misses.
+
+For example:
+
+If b were misaligned (say starting at address 5), the CPU would need to fetch two cache lines to load b (because the value would span the end of one cache line and the beginning of the next).
+
+This increases the number of memory accesses and can slow down the application.
+
+How to Optimize:
+Ensure data types are properly aligned according to their size. For instance, u64 should always be aligned on 8-byte boundaries.
+
+Use struct padding or compiler-specific directives to enforce proper alignment.
+
+In C/C++, the compiler often handles alignment for you automatically, but you can also use alignas (C++11) or __attribute__((aligned(8))) (GCC) to enforce alignment.
+
+```
+
+
 Als je data niet goed uitgelegd is in memory heb je cache missess. Ik begrijp er het fijne niet van vandaar dat ik bovenstaande artikels verzameld heb.
+
+struct {  
+    a : u32  -> 4 bytes
+    b : u64  -> 8 bytes
+    c : bool -> 1 byte
+} 
+size -> 13 bytes, maar de memory alignment is 24 bytes! Dit kan tot cache missess lijden!
 
 ## TODO 
 lees de artikels en vat ze hieronder samen
