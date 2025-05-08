@@ -3,7 +3,12 @@
 [stackoverflow -- purpose-of-memory-alignment](https://stackoverflow.com/questions/381244/purpose-of-memory-alignment) \
 [oud IBM artickle?](https://web.archive.org/web/20201021053824/https://developer.ibm.com/technologies/systems/articles/pa-dalign/) \
 [memory-allocation-strategies-002](https://www.gingerbill.org/article/2019/02/08/memory-allocation-strategies-002/) \
-[Andrew Kelley Practical Data Oriented Design (DoD)](https://www.youtube.com/watch?v=IroPQ150F6c)
+[Andrew Kelley Practical Data Oriented Design (DoD)](https://www.youtube.com/watch?v=IroPQ150F6c) \
+[An in depth guid to using mmap](https://thelinuxcode.com/using_mmap_function_linux/) \
+[CS 134 OS—5.4 Paging](https://www.youtube.com/watch?v=VdtPTv4u0SE) \
+[CS 134 OS-7: Virtual Memory](https://www.youtube.com/watch?v=x-cZTBWCpKI) \
+[CS 134 OS—7: Segmentation & Paging on x86](https://www.youtube.com/watch?v=U0lC_auacXM) \
+[understanding mmap, the workhorse behind keeping memory access efficient in linux](https://www.youtube.com/watch?v=8hVLcyBkSXY)
 
 # Memory alignament and Data oriented programming
 
