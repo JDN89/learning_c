@@ -6,10 +6,20 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
+typedef struct Arena Arena;
+
 // Macros
 #define KB(x) ((x) * 1024ULL)
 #define MB(x) ((x) * 1024ULL * 1024ULL)
 #define AlignPow2(x, b) (((x) + (b) - 1) & ~((b) - 1))
+#define arena_push_struct(arena, Type)                                         \
+  (Type *)arena_push((arena), sizeof(Type), alignof(Type))
+#define arena_push_array(arena, Type, Count)                                   \
+  (Type *)arena_push((arena), sizeof(Type) * (Count), alignof(Type))
+// uint64_t arena_get_used(struct Arena *arena) { return arena->pos; }
+//
+// uint64_t arena_get_free(struct Arena *arena) { return arena->cmt -
+// arena->pos; }
 
 #define arena_alloc(...)                                                       \
   arena_alloc_(&(ArenaParams){.reserve_size = arena_default_reserve_size,      \
@@ -34,7 +44,6 @@ struct ArenaParams {
   void *optional_backing_buffer;
 };
 
-typedef struct Arena Arena;
 struct Arena {
   Arena *prev;
   Arena *current;

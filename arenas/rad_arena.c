@@ -86,21 +86,37 @@ void arena_release(Arena *arena) {
 // alignment
 void *arena_push(Arena *arena, uint64_t size, uint64_t align) {
   Arena *current = arena->current;
-  uint64_t pos_pre = AlignPow2(current->pos, align); // Align current position
-  uint64_t pos_pst = pos_pre + size; // Calculate new position after allocation
+  uint64_t pos_pre = AlignPow2(current->pos, align);
+  uint64_t pos_pst = pos_pre + size;
 
-  // If allocation exceeds current committed size, commit more memory
-  if (pos_pst > current->cmt) {
-    uint64_t commit_end =
-        AlignPow2(pos_pst, current->cmt_size); // Align to commit block size
-    uint64_t commit_diff = commit_end - current->cmt; // Amount to commit
-    mprotect((uint8_t *)current + current->cmt, commit_diff,
-             PROT_READ | PROT_WRITE); // Commit memory
-    current->cmt = commit_end;        // Update committed end
+  // If allocation exceeds reserved memory, chain a new arena
+  if (pos_pst > current->res) {
+    Arena *new_arena =
+        arena_alloc_(&(ArenaParams){.reserve_size = current->res_size,
+                                    .commit_size = current->cmt_size,
+                                    .flags = current->flags});
+
+    if (!new_arena)
+      return NULL;
+
+    new_arena->prev = current;
+    arena->current = new_arena;
+    current = new_arena;
+    pos_pre = AlignPow2(current->pos, align);
+    pos_pst = pos_pre + size;
   }
 
-  void *result = (uint8_t *)current + pos_pre; // Pointer to allocated memory
-  current->pos = pos_pst;                      // Bump position
+  // If allocation exceeds committed size, commit more memory
+  if (pos_pst > current->cmt) {
+    uint64_t commit_end = AlignPow2(pos_pst, current->cmt_size);
+    uint64_t commit_diff = commit_end - current->cmt;
+    mprotect((uint8_t *)current + current->cmt, commit_diff,
+             PROT_READ | PROT_WRITE);
+    current->cmt = commit_end;
+  }
+
+  void *result = (uint8_t *)current + pos_pre;
+  current->pos = pos_pst;
   return result;
 }
 
