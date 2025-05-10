@@ -9,9 +9,10 @@
 typedef struct Arena Arena;
 
 // Macros
+// TODO how does align forward work here?
+#define AlignPow2(x, b) (((x) + (b) - 1) & ~((b) - 1))
 #define KB(x) ((x) * 1024ULL)
 #define MB(x) ((x) * 1024ULL * 1024ULL)
-#define AlignPow2(x, b) (((x) + (b) - 1) & ~((b) - 1))
 #define arena_push_struct(arena, Type)                                         \
   (Type *)arena_push((arena), sizeof(Type), alignof(Type))
 #define arena_push_array(arena, Type, Count)                                   \
